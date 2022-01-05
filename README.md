@@ -11,7 +11,7 @@
 <p>Le problème que doit résoudre l'algorithme est le suivant :
 
 On nous donne une fonction booléenne qui fonctionne comme une boite noire.
-Cette fonction prend en entrée une chaine de bit et renvoie soit $0$ ou $1$.
+Cette fonction prend en entrée une chaine de bit et renvoie soit $`0`$ ou $1$.
 
 On sait que la fonction est forcément soit constante soit équilibrée.
 
