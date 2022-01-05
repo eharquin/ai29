@@ -22,7 +22,7 @@ L'objectif est de determiné si une fonction donné est constante ou équilibré
 
 <h2>La solution classique :</h2>
 
-<p>Dans le meilleur des cas seulement deux tests sont nécéssaire : si la première sortie est $1$ et la deuxième est $`0`$ on peut être sur que la fonction est équilibrée.
+<p>Dans le meilleur des cas seulement deux tests sont nécéssaire : si la première sortie est $`1`$ et la deuxième est $`0`$ on peut être sur que la fonction est équilibrée.
 
 Dans le pire cas la solution classique mettra $`2^{n-1}+1`$ car nous devons tester au minimum la moitié des cas $`+1`$ pour s'assurer que la fonction est bien constante.
 
