@@ -118,7 +118,7 @@ Pour commencer on définit une chaine de bit qui initialise les qubits en appliq
 
 Ensuite, on ajoute des portes C-NOT en utilisant chaque qubit d'entrée comme contrôle, et le qubit de sortie comme cible.
 
-Pour finir on réapplique à nouveau les portes $X$ de la première étape pour restaurer l'état des qubits.
+Pour finir on réapplique à nouveau les portes $`X`$ de la première étape pour restaurer l'état des qubits.
 </p>
 
 
@@ -126,11 +126,11 @@ Pour finir on réapplique à nouveau les portes $X$ de la première étape pour 
 
 On initialise le qubit de sortie à $`|1\rangle`$:
 
-$$`\vert \psi_0 \rangle = \vert0\rangle^{\otimes n} \vert 1\rangle`$$
+$`\vert \psi_0 \rangle = \vert0\rangle^{\otimes n} \vert 1\rangle`$
 
 Etape 1 : on applique la porte $H$ sur chaque qubit:
 
-$$`\vert \psi_1 \rangle = \frac{1}{\sqrt{2^{n+1}}}\sum_{x=0}^{2^n-1} \vert x\rangle \left(|0\rangle - |1 \rangle \right)`$$
+$`\vert \psi_1 \rangle = \frac{1}{\sqrt{2^{n+1}}}\sum_{x=0}^{2^n-1} \vert x\rangle \left(|0\rangle - |1 \rangle \right)`$
 
 Code :
 ```python
@@ -233,6 +233,7 @@ dj_circuit.draw()
 
 Dans le cas de l'oracle équilibrée en mesurant on constate qu'on a 0% de chance de mesurer 000 et 100% de chance de mesurer 111 ce qui prédit correctement que la fonction est balancée.
 
-Dans cette application le gain de l’ordinateur quantique par rapport à l’ordinateur classique est impressionnant ($1$ seul appel contre $2^{n-1}+1$)
+Dans cette application le gain de l’ordinateur quantique par rapport à l’ordinateur classique est impressionnant ($`1`$ seul appel contre $`2^{n-1}+1`$)
 
-Cependant la valeur $2^{n-1}+1$ est un pire cas très improbable : dès qu'on rencontre deux valeurs différentes (ce qui est rapidement probable au bout de quelques appels si la fonction est équilibrée).
+Cependant la valeur $`2^{n-1}+1`$ est un pire cas très improbable : dès qu'on rencontre deux valeurs différentes (ce qui est rapidement probable au bout de quelques appels si la fonction est équilibrée).
+
