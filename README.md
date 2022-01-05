@@ -11,22 +11,22 @@
 <p>Le problème que doit résoudre l'algorithme est le suivant :
 
 On nous donne une fonction booléenne qui fonctionne comme une boite noire.
-Cette fonction prend en entrée une chaine de bit et renvoie soit $`0`$ ou $1$.
+Cette fonction prend en entrée une chaine de bit et renvoie soit $`0`$ ou $`1`$.
 
 On sait que la fonction est forcément soit constante soit équilibrée.
 
-Une fonction constante renvoie toujours $0$ ou alors toujours $1$ peut importe son entrée. Une fonction équilibré renvoie dans 50% des cas $0$ et dans 50% des cas $1$.
+Une fonction constante renvoie toujours $`0`$ ou alors toujours $`1`$ peut importe son entrée. Une fonction équilibré renvoie dans 50% des cas $0$ et dans 50% des cas $1$.
 
 L'objectif est de determiné si une fonction donné est constante ou équilibré.</p>
 
 
 <h2>La solution classique :</h2>
 
-<p>Dans le meilleur des cas seulement deux tests sont nécéssaire : si la première sortie est $1$ et la deuxième est $0$ on peut être sur que la fonction est équilibrée.
+<p>Dans le meilleur des cas seulement deux tests sont nécéssaire : si la première sortie est $1$ et la deuxième est $`0`$ on peut être sur que la fonction est équilibrée.
 
-Dans le pire cas la solution classique mettra $2^{n-1}+1$ car nous devons tester au minimum la moitié des cas$+1$ pour s'assurer que la fonction est bien constante.
+Dans le pire cas la solution classique mettra $`2^{n-1}+1`$ car nous devons tester au minimum la moitié des cas $`+1`$ pour s'assurer que la fonction est bien constante.
 
-L'algorithme classique est donc de complexité $O(2^{n-1})$.</p>
+L'algorithme classique est donc de complexité $`O(2^{n-1})`$.</p>
 
 
 <h2>La solution quantique :</h2>
@@ -37,11 +37,11 @@ L'algorithme classique est donc de complexité $O(2^{n-1})$.</p>
 
 <p>Pour l'oracle constant c'est très simple :
 
-Si $f(x) = 0$, alors on applique la porte $I$ sur le deuxième qubit.
+Si $`f(x) = 0`$, alors on applique la porte $`I`$ sur le deuxième qubit.
 
-Si $f(x) = 1$, alors on applique la porte $X$ sur le deuxième qubit.
+Si $`f(x) = 1`$, alors on applique la porte $`X`$ sur le deuxième qubit.
 
-Et inversement si on veut une fonction constante qui retourne $1$.
+Et inversement si on veut une fonction constante qui retourne $`1`$.
 
 Ci-dessous le code permetant d'implémenter l'oracle constant:
 ```python
@@ -56,9 +56,9 @@ if output == 1:
 const_oracle.draw()
 ```
 
-Dans ce cas l'entrée n'a pas d'effet sur la sortie donc on fixe aléatoirement le qubit de sortie à $|0\rangle$ ou $|1\rangle$.
+Dans ce cas l'entrée n'a pas d'effet sur la sortie donc on fixe aléatoirement le qubit de sortie à $`|0\rangle`$ ou $`|1\rangle`$.
 
-Le circuit quand le troisième qubit est fixé à $|0\rangle$:
+Le circuit quand le troisième qubit est fixé à $`|0\rangle`$:
 
 ```
 q_0: ─────
@@ -71,7 +71,7 @@ q_3: ─────
 
 ```
 
-Le circuit quand le troisième qubit est fixé à $|1\rangle$:
+Le circuit quand le troisième qubit est fixé à $`|1\rangle`$:
 
 ```
 q_0: ─────
@@ -114,7 +114,7 @@ for qubit in range(len(b_str)):
 balanced_oracle.draw()
 ```
 
-Pour commencer on définit une chaine de bit qui initialise les qubits en appliquant des portes $X$ quand il s'agit d'un $|1\rangle$.
+Pour commencer on définit une chaine de bit qui initialise les qubits en appliquant des portes $`X`$ quand il s'agit d'un $`|1\rangle`$.
 
 Ensuite, on ajoute des portes C-NOT en utilisant chaque qubit d'entrée comme contrôle, et le qubit de sortie comme cible.
 
