@@ -1,30 +1,36 @@
-<h1>Exercice 1 : l'algorithme de Deutch-Jozsa</h1>
+<h1>Exercice 2 : l'algorithme de Simon</h1>
 
 
 <h2>L'algorithme :</h2>
 
-<p>L'algorithme de Deutsch-Jozsa, a été le premier exemple d'un algorithme quantique dont les performances se sont montrés supérieures à celles du meilleur algorithme classique. Il a montré pour la première vfois que l'utilisation d'un ordinateur quantique pouvait, dans certains usages, dépasser les ordianteurs classiques.</p>
+<p>L'algorithme de Simon, contrairement à l'algorithme de Deutch-Jozsa, a été le premier algorithme quantique à montrer une accélération exponentielle par rapport au meilleur algorithme classique.</p>
 
 
 <h2>Le problème :</h2>
 
 <p>Le problème que doit résoudre l'algorithme est le suivant :
 
-On nous donne une fonction booléenne qui fonctionne comme une boite noire.
-Cette fonction prend en entrée une chaine de bit et renvoie soit $`0`$ ou $`1`$.
+On nous donne une fonction qui fonctionne comme une boite noire.
+On sait que cette fonction est soit :
 
-On sait que la fonction est forcément soit constante soit équilibrée.
+- one-to-one : renvoie une unique sortie pour toute entrée. 
+Exemple : $`f(1) \rightarrow 1, \quad f(2) \rightarrow 2, \quad f(3) \rightarrow 3, \quad f(4) \rightarrow 4`$
 
-Une fonction constante renvoie toujours $`0`$ ou alors toujours $`1`$ peut importe son entrée. Une fonction équilibré renvoie dans 50% des cas $0$ et dans 50% des cas $1$.
+- two-to-one : renvoie une unique sortie pour strictement deux entrée différente. 
+Exemple : $`f(1) \rightarrow 1, \quad f(2) \rightarrow 2, \quad f(3) \rightarrow 1, \quad f(4) \rightarrow 2`$
 
-L'objectif est de determiné si une fonction donné est constante ou équilibré.</p>
+Cette correspondance two-to-one se fait selon une chaîne de bits secrète $`b`$ tel que :
+$` \textrm{soit }x_1,x_2: \quad f(x_1) = f(x_2) \\ \textrm{on est sur que }: \quad x_1 \oplus x_2 = b `$
+
+Le premier objectif est de déterminer si $f$ est une fonction one-to-one ou une fonction two-to-one. Si $f$ est une fonction two-to-one et le deuxième objectif est de déterminer la chaine de bits $`b`$.
+Les deux cas se ramènent en réalité au même problème : trouver $`b`$, où une chaîne de bits de $`b={000...}`$ représente la fonction one-to-one de $`f`$.</p>
 
 
 <h2>La solution classique :</h2>
 
-<p>Dans le meilleur des cas seulement deux tests sont nécéssaire : si la première sortie est $`1`$ et la deuxième est $`0`$ on peut être sur que la fonction est équilibrée.
+<p>Dans le meilleur des cas si il s'agit d'une fonction two-to-one, comme pour l'algorithme de Deutch-Jozsa, seulement deux tests sont nécéssaires.
 
-Dans le pire cas la solution classique mettra $`2^{n-1}+1`$ car nous devons tester au minimum la moitié des cas $`+1`$ pour s'assurer que la fonction est bien constante.
+Cependant si nous voulons connaitre b pour une fonction f donné nous devrons vérifier $`2^{n-1}+1`$ entrée car nous devons tester au minimum la moitié des cas $`+1`$ jusqu'à trouver deux cas de la même sortie.
 
 L'algorithme classique est donc de complexité $`O(2^{n-1})`$.</p>
 
@@ -32,95 +38,6 @@ L'algorithme classique est donc de complexité $`O(2^{n-1})`$.</p>
 <h2>La solution quantique :</h2>
 
 <p>En utilisant la solution quantique il est alors possible de résoudre ce problème avec un seule appel de la fonction. Il faut cependant que la fonction soit implémenté comme un oracle quantique.</p>
-
-<h3>Implémentation des oracles quantique</h3> 
-
-<p>Pour l'oracle constant c'est très simple :
-
-Si $`f(x) = 0`$, alors on applique la porte $`I`$ sur le deuxième qubit.
-
-Si $`f(x) = 1`$, alors on applique la porte $`X`$ sur le deuxième qubit.
-
-Et inversement si on veut une fonction constante qui retourne $`1`$.
-
-Ci-dessous le code permetant d'implémenter l'oracle constant:
-```python
-n = 3
-
-const_oracle = QuantumCircuit(n+1)
-
-output = np.random.randint(2)
-if output == 1:
-    const_oracle.x(n)
-
-const_oracle.draw()
-```
-
-Dans ce cas l'entrée n'a pas d'effet sur la sortie donc on fixe aléatoirement le qubit de sortie à $`|0\rangle`$ ou $`|1\rangle`$.
-
-Le circuit quand le troisième qubit est fixé à $`|0\rangle`$:
-
-```
-q_0: ─────
-
-q_1: ─────
-
-q_2: ─────
-
-q_3: ─────
-
-```
-
-Le circuit quand le troisième qubit est fixé à $`|1\rangle`$:
-
-```
-q_0: ─────
-
-q_1: ─────
-
-q_2: ─────
-     ┌───┐
-q_3: ┤ X ├
-     └───┘
-```
-
-Pour l'oracle équilibré ça se complique un peu et il existe différentes implémentation du circuit, le site de quiskit propose l'implémentation suivante:
-```python
-n = 3
-
-balanced_oracle = QuantumCircuit(n+1)
-b_str = "101"
-
-# Place X-gates
-for qubit in range(len(b_str)):
-    if b_str[qubit] == '1':
-        balanced_oracle.x(qubit)
-
-# Use barrier as divider
-balanced_oracle.barrier()
-
-# Controlled-NOT gates
-for qubit in range(n):
-    balanced_oracle.cx(qubit, n)
-
-balanced_oracle.barrier()
-
-# Place X-gates
-for qubit in range(len(b_str)):
-    if b_str[qubit] == '1':
-        balanced_oracle.x(qubit)
-
-# Show oracle
-balanced_oracle.draw()
-```
-
-Pour commencer on définit une chaine de bit qui initialise les qubits en appliquant des portes $`X`$ quand il s'agit d'un $`|1\rangle`$.
-
-Ensuite, on ajoute des portes C-NOT en utilisant chaque qubit d'entrée comme contrôle, et le qubit de sortie comme cible.
-
-Pour finir on réapplique à nouveau les portes $`X`$ de la première étape pour restaurer l'état des qubits.
-</p>
-
 
 <h3>Implémentation de l'algorithme quantique</h3> 
 
