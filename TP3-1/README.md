@@ -17,7 +17,7 @@ On sait que la fonction est forcément soit constante soit équilibrée.
 
 Une fonction constante renvoie toujours $`0`$ ou alors toujours $`1`$ peut importe son entrée. Une fonction équilibré renvoie dans 50% des cas $0$ et dans 50% des cas $1$.
 
-L'objectif est de determiné si une fonction donné est constante ou équilibré.</p>
+L'objectif est de determiner si une fonction donné est constante ou équilibré.</p>
 
 
 <h2>La solution classique :</h2>
