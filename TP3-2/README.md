@@ -90,11 +90,22 @@ c: 3/═════════════════════════
                                                0  1  2
 ```
 
+En utilisant un simulater on peut facilement vérifié qu'on peut retrouver la valeur de la chaine de bit b en résolvant un système d'équation. Ici l'algorithme quantique résout les équations simultanément.
+
+Par exemple si on mesure $`001`$ dans un premier temps, on a:
+
+$`\begin{aligned} b \cdot 001 &= 0 \\ (b_2 \cdot 0) + (b_1 \cdot 0) + (b_0 \cdot 1) & = 0 \\ (\cancel{b_2 \cdot 0}) + (\cancel{b_1 \cdot 0}) + (b_0 \cdot 1) & = 0 \\ b_0 & = 0\\ \end{aligned} `$
+
+Et si dans un second temps on mesure $`111`$ :
+
+$`\begin{aligned} b \cdot 111 &= 0 \\ (b_2 \cdot 1) + (b_1 \cdot 1) + (\cancel{0 \cdot 1}) & = 0 \\ (b_2 \cdot 1) + (b_1 \cdot 1) & = 0 \\ \end{aligned} `$
+
+On peut donc retrouver la chaine de bit progressivement. Ici soit b = 000 ou b = 110.
+
+
+
 <h2>Consclusion</h2>
 
-Dans le cas de l'oracle équilibrée en mesurant on constate qu'on a 0% de chance de mesurer 000 et 100% de chance de mesurer 111 ce qui prédit correctement que la fonction est balancée.
+Contrairement à l'algorithme de Deutch-Jozsa, l'algorithme de simon montre une accélération exponentielle par rapport au meilleur algorithme classique que nous pouvons produire.</p>
 
-Dans cette application le gain de l’ordinateur quantique par rapport à l’ordinateur classique est impressionnant ($`1`$ seul appel contre $`2^{n-1}+1`$)
-
-Cependant la valeur $`2^{n-1}+1`$ est un pire cas très improbable : dès qu'on rencontre deux valeurs différentes (ce qui est rapidement probable au bout de quelques appels si la fonction est équilibrée).
-
+Dans cette application le gain de l’ordinateur quantique par rapport à l’ordinateur classique est impressionnant ($`O(n)`$ contre $`O(2^{n-1})`$)
