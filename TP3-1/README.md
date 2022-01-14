@@ -119,7 +119,54 @@ Pour commencer on définit une chaine de bit qui initialise les qubits en appliq
 Ensuite, on ajoute des portes C-NOT en utilisant chaque qubit d'entrée comme contrôle, et le qubit de sortie comme cible.
 
 Pour finir on réapplique à nouveau les portes $`X`$ de la première étape pour restaurer l'état des qubits.
+
+
+Voilà notre propre implémentation pour l'oracle équilibré :
 </p>
+
+```python
+n = 3
+
+balanced_oracle = QuantumCircuit(n+1)
+b_str = "101"
+
+# Place X-gates
+for qubit in range(len(b_str)):
+    if b_str[qubit] == '1':
+        balanced_oracle.x(qubit)
+
+# Use barrier as divider
+balanced_oracle.barrier()
+
+# Controlled-NOT gates
+for qubit in range(n):
+    balanced_oracle.swap(qubit, qubit+1)
+
+balanced_oracle.barrier()
+
+# Place X-gates
+for qubit in range(len(b_str)):
+    if b_str[qubit] == '1':
+        balanced_oracle.x(qubit)
+```
+
+<p>
+Encore une fois on définit une chaine de bit qui initialise les qubits en appliquant des portes $`X`$ quand il s'agit d'un $`|1\rangle`$.
+</p>
+
+Le circuit :
+
+```
+     ┌───┐ ░           ░ ┌───┐
+q_0: ┤ X ├─░──X────────░─┤ X ├
+     └───┘ ░  │        ░ └───┘
+q_1: ──────░──X──X─────░──────
+     ┌───┐ ░     │     ░ ┌───┐
+q_2: ┤ X ├─░─────X──X──░─┤ X ├
+     └───┘ ░        │  ░ └───┘
+q_3: ──────░────────X──░──────
+           ░           ░
+```
 
 
 <h3>Implémentation de l'algorithme quantique</h3> 
