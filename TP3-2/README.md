@@ -39,111 +39,55 @@ L'algorithme classique est donc de complexité $`O(2^{n-1})`$.</p>
 
 <p>En utilisant la solution quantique il est alors possible de résoudre ce problème avec un seule appel de la fonction. Il faut cependant que la fonction soit implémenté comme un oracle quantique.</p>
 
-<h3>Implémentation de l'algorithme quantique</h3> 
+<h3>Implémentation de l'algorithme quantique avec 3 qubit</h3> 
 
-On initialise le qubit de sortie à $`|1\rangle`$:
+L'algorithme utilise un oracle quantique boite noire qui prend en entrée une chaine de 3 bits.
 
-$`\vert \psi_0 \rangle = \vert0\rangle^{\otimes n} \vert 1\rangle`$
+Code:
 
-Etape 1 : on applique la porte $H$ sur chaque qubit:
-
-$`\vert \psi_1 \rangle = \frac{1}{\sqrt{2^{n+1}}}\sum_{x=0}^{2^n-1} \vert x\rangle \left(|0\rangle - |1 \rangle \right)`$
-
-Code :
 ```python
-n = 3
+b = '110'
 
-dj_circuit = QuantumCircuit(n+1, n)
+n = len(b)
+simon_circuit = QuantumCircuit(n*2, n)
 
-# Apply H-gates
-for qubit in range(n):
-    dj_circuit.h(qubit)
+# Apply Hadamard gates before querying the oracle
+simon_circuit.h(range(n))    
+    
+# Apply barrier for visual separation
+simon_circuit.barrier()
 
-# Put qubit in state |->
-dj_circuit.x(n)
-dj_circuit.h(n)
-dj_circuit.draw()
-```
-Circuit :
-```text
-     ┌───┐
-q_0: ┤ H ├─────
-     ├───┤
-q_1: ┤ H ├─────
-     ├───┤
-q_2: ┤ H ├─────
-     ├───┤┌───┐
-q_3: ┤ X ├┤ H ├
-     └───┘└───┘
-c: 3/══════════
-```
+simon_circuit += simon_oracle(b)
 
-Maintenant on ajoute l'oracle, par exemple l'oracle équilibrée :
+# Apply barrier for visual separation
+simon_circuit.barrier()
 
-Code :
-```python
-n = 3
+# Apply Hadamard gates to the input register
+simon_circuit.h(range(n))
 
-dj_circuit = QuantumCircuit(n+1, n)
-
-# Apply H-gates
-for qubit in range(n):
-    dj_circuit.h(qubit)
-
-# Put qubit in state |->
-dj_circuit.x(n)
-dj_circuit.h(n)
-
-# Add oracle
-dj_circuit += balanced_oracle
-dj_circuit.draw()
+# Measure qubits
+simon_circuit.measure(range(n), range(n))
+simon_circuit.draw()
 ```
 
 Circuit :
 
 ```text
-     ┌───┐┌───┐ ░                 ░ ┌───┐
-q_0: ┤ H ├┤ X ├─░───■─────────────░─┤ X ├
-     ├───┤└───┘ ░   │             ░ └───┘
-q_1: ┤ H ├──────░───┼────■────────░──────
-     ├───┤┌───┐ ░   │    │        ░ ┌───┐
-q_2: ┤ H ├┤ X ├─░───┼────┼────■───░─┤ X ├
-     ├───┤├───┤ ░ ┌─┴─┐┌─┴─┐┌─┴─┐ ░ └───┘
-q_3: ┤ X ├┤ H ├─░─┤ X ├┤ X ├┤ X ├─░──────
-     └───┘└───┘ ░ └───┘└───┘└───┘ ░
-c: 3/════════════════════════════════════
-
-```
-
-Pour finir on applique des porte $`H`$ sur nos qubit d'entrée et on les mesures :
-
-```python
-n = 3
-
-dj_circuit = QuantumCircuit(n+1, n)
-
-# Apply H-gates
-for qubit in range(n):
-    dj_circuit.h(qubit)
-
-# Put qubit in state |->
-dj_circuit.x(n)
-dj_circuit.h(n)
-
-# Add oracle
-dj_circuit += balanced_oracle
-
-# Repeat H-gates
-for qubit in range(n):
-    dj_circuit.h(qubit)
-dj_circuit.barrier()
-
-# Measure
-for i in range(n):
-    dj_circuit.measure(i, i)
-
-# Display circuit
-dj_circuit.draw()
+     ┌───┐ ░                           ░ ┌───┐┌─┐
+q_0: ┤ H ├─░───■───────────────────────░─┤ H ├┤M├──────
+     ├───┤ ░   │                       ░ ├───┤└╥┘┌─┐
+q_1: ┤ H ├─░───┼────■─────────■────■───░─┤ H ├─╫─┤M├───
+     ├───┤ ░   │    │         │    │   ░ ├───┤ ║ └╥┘┌─┐
+q_2: ┤ H ├─░───┼────┼────■────┼────┼───░─┤ H ├─╫──╫─┤M├
+     └───┘ ░ ┌─┴─┐  │    │    │    │   ░ └───┘ ║  ║ └╥┘
+q_3: ──────░─┤ X ├──┼────┼────┼────┼───░───────╫──╫──╫─
+           ░ └───┘┌─┴─┐  │  ┌─┴─┐  │   ░       ║  ║  ║
+q_4: ──────░──────┤ X ├──┼──┤ X ├──┼───░───────╫──╫──╫─
+           ░      └───┘┌─┴─┐└───┘┌─┴─┐ ░       ║  ║  ║
+q_5: ──────░───────────┤ X ├─────┤ X ├─░───────╫──╫──╫─
+           ░           └───┘     └───┘ ░       ║  ║  ║
+c: 3/══════════════════════════════════════════╩══╩══╩═
+                                               0  1  2
 ```
 
 <h2>Consclusion</h2>
