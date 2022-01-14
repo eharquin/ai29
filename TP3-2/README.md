@@ -90,7 +90,7 @@ c: 3/═════════════════════════
                                                0  1  2
 ```
 
-En utilisant un simulater on peut facilement vérifié qu'on peut retrouver la valeur de la chaine de bit b en résolvant un système d'équation. Ici l'algorithme quantique résout les équations simultanément.
+En utilisant un simulateur on peut facilement vérifier qu'on peut retrouver la valeur de la chaine de bit b en résolvant un système d'équation. Ici l'algorithme quantique résout les équations simultanément.
 
 Par exemple si on mesure $`001`$ dans un premier temps, on a:
 
@@ -100,7 +100,8 @@ Et si dans un second temps on mesure $`111`$ :
 
 $`\begin{aligned} b \cdot 111 &= 0 \\ (b_2 \cdot 1) + (b_1 \cdot 1) + (\cancel{0 \cdot 1}) & = 0 \\ (b_2 \cdot 1) + (b_1 \cdot 1) & = 0 \\ \end{aligned} `$
 
-On peut donc retrouver la chaine de bit progressivement. Ici soit b = 000 ou b = 110.
+On peut donc retrouver la chaine de bit progressivement. 
+Ici on sait que b vaut soit $`000`$ ou $`110`$.
 
 
 
